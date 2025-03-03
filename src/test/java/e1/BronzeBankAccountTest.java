@@ -6,31 +6,32 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GoldBankAccountTest extends BankAccountTest{
+public class BronzeBankAccountTest extends BankAccountTest{
     @BeforeEach
     void init(){
-        this.account = new GoldBankAccount(new CoreBankAccount());
+        this.account = new BronzeBankAccount(new CoreBankAccount());
     }
 
     @Test
-    public void testCanWithdrawWithPositiveBalance() {
-        int withdrawPermittedAmount = 200;
+    public void testCanWithdrawWithoutFeeApplication() {
+        int withdrawPermittedAmount = 80;
         this.account.deposit(DEPOSIT_AMOUNT);
         this.account.withdraw(withdrawPermittedAmount);
         assertEquals(DEPOSIT_AMOUNT-(withdrawPermittedAmount), this.account.getBalance());
     }
 
     @Test
-    public void testCanWithdrawWithNegativeBalance() {
-        int withdrawPermittedAmount = 1400;
+    public void testCanWithdrawWithFeeApplication() {
+        int withdrawPermittedAmount = 150;
+        int withdrawalFee = 1;
         this.account.deposit(DEPOSIT_AMOUNT);
         this.account.withdraw(withdrawPermittedAmount);
-        assertEquals(DEPOSIT_AMOUNT-(withdrawPermittedAmount), this.account.getBalance());
+        assertEquals(DEPOSIT_AMOUNT-(withdrawPermittedAmount + withdrawalFee), this.account.getBalance());
     }
 
     @Test
-    public void testCannotWithdrawMoreThanOverdraftLimit(){
-        int withdrawDeniedAmount = 1600;
+    public void testCannotWithdraw(){
+        int withdrawDeniedAmount = 1100;
         this.account.deposit(DEPOSIT_AMOUNT);
         assertThrows(IllegalStateException.class, () -> this.account.withdraw(withdrawDeniedAmount));
     }
