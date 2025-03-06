@@ -1,28 +1,20 @@
 package e1;
 
-public class BronzeBankAccount implements BankAccount{
-    private final BankAccount base;
+public class BronzeBankAccount extends BankAccountDecorator{
+    private final int withdrawalFee;
 
-    public BronzeBankAccount(BankAccount bankAccount){
-        this.base = bankAccount;
-    }
-    @Override
-    public int getBalance() {
-        return this.base.getBalance();
-    }
-
-    @Override
-    public void deposit(int amount) {
-        this.base.deposit(amount);
+    public BronzeBankAccount(BankAccount base, int withdrawalFee) {
+        super(base);
+        this.withdrawalFee = withdrawalFee;
     }
 
     @Override
     public void withdraw(int amount) {
-        int withdrawalFee = 1;
         int limitForFeeApplication = 100;
-        if(amount > this.base.getBalance()){
+        if (amount > base.getBalance()) {
             throw new IllegalStateException();
         }
-        this.base.withdraw((amount > limitForFeeApplication) ? amount+ withdrawalFee : amount);
+        int fee = (amount > limitForFeeApplication) ? withdrawalFee : 0;
+        base.withdraw(amount + fee);
     }
 }

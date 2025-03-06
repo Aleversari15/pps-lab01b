@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BronzeBankAccountTest extends BankAccountTest{
     @BeforeEach
     void init(){
-        this.account = new BronzeBankAccount(new CoreBankAccount());
+        this.account = new BronzeBankAccount(new CoreBankAccount(),1);
     }
 
     @Test
